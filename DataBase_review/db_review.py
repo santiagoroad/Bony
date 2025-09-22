@@ -7,7 +7,7 @@ connection = psycopg2.connect(
     port="5432",          # default port
     database="bony",      # name of your database
     user="postgres",      # your username
-    password="Tsnstymdr007#"  # your password
+    password=""  # your password
 )
 
 tables_with_data = list()
