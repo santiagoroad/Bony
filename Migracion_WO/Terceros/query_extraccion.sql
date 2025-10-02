@@ -1,0 +1,37 @@
+-- 
+select 
+	case when l10n_latam_identification_type_id = 5 then 'CC' else 'NIT' end as "Tipo Identificación", 
+	SPLIT_PART(vat, '-', 1) as "No. Identificación",
+	SPLIT_PART(contact_address_complete, ',', 3) as "Ciudad Identificación",	
+	case when l10n_latam_identification_type_id = 5 then SPLIT_PART(complete_name, ' ', 1) else complete_name end as "1er. Nombre o Razón Social",	
+	case when l10n_latam_identification_type_id = 5 then SPLIT_PART(complete_name, ' ', 2) else '' end as "2do. Nombre",	
+	case when l10n_latam_identification_type_id = 5 then SPLIT_PART(complete_name, ' ', 3) else '' end as "1er. Apellido",
+	case when l10n_latam_identification_type_id = 5 then SPLIT_PART(complete_name, ' ', 4) else '' end as "2do. Apellido",
+	'Cliente' as "Propiedad Activa",
+	-1 as Activo, 
+	'' as "Propiedad Retención",
+	TO_CHAR(create_date, 'DD/MM/YYYY') as "Fecha Creación",
+	'' as Plazo,
+	'Normal' as "Clasificación Dian",
+	'' as "Actividad Económica", '' as Matricula, '' as "Tipos Responsabilidades", 
+	'' as "Aplica ReteIca", '' as "% Ica", '' as "Maneja Cupo Crédito", '' as "Cupo Crédito", 
+	id as "Código",
+	'' as "Fecha Aniversario",
+	'' as "Forma de Pago",
+	'' as "Lista Precios",
+	'' as Nota, '' as "% Descuento", '' as Vendedor, '' as "Clasificación Uno", '' as "Clasificación Dos", '' as "Clasificación Tres",
+	'' as "Zona Uno", '' as "Zona Dos", '' as "Personalizado 1", '' as "Personalizado 2", '' as "Personalizado 3", '' as "Personalizado 4",
+	'' as "Personalizado 5", '' as "Personalizado 6", '' as "Personalizado 7", '' as "Personalizado 8", '' as "Personalizado 9", '' as "Personalizado 10",
+	'' as "Personalizado 11", '' as "Personalizado 12", '' as "Personalizado 13", '' as "Personalizado 14", '' as "Personalizado 15",
+	'Empresa/Oficina' as "Tipo Dirección", 
+	SPLIT_PART(contact_address_complete, ',', 2) as "Ciudad Dirección",
+	SPLIT_PART(contact_address_complete, ',', 1) as "Dirección",
+	-1 as "Dirección Principal",
+	case when phone is null then mobile else phone end as "Teléfonos",
+	'' as "Código Postal", '' as Fax, mobile as "Movil 1", '' as "Movil 2",
+	email as "E Mail", 
+	'' as "E Mail 2", '' as "E Mail 3", 
+	website as "Página Web", '' as Observaciones, '' as Sucursal
+from res_partner
+where company_id = 2
+order by l10n_latam_identification_type_id;
