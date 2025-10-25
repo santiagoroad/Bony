@@ -1,0 +1,33 @@
+SELECT
+    rp.id AS partner_id,
+    rp.name AS partner_name,
+    CASE 
+        WHEN rp.is_company = TRUE THEN 'Empresa'
+        ELSE 'Persona'
+    END AS tipo_tercero,
+    aa.id AS cuenta_id,
+    aa.name->>'es_ES' AS nombre_cuenta,
+
+    -- Saldo inicial al 2025-01-01
+    COALESCE(SUM(CASE WHEN aml.date < '2025-01-01' THEN aml.debit - aml.credit ELSE 0 END), 0) AS saldo_inicial,
+
+    -- Movimientos del año 2025
+    COALESCE(SUM(CASE WHEN aml.date BETWEEN '2025-01-01' AND '2025-12-31' THEN aml.debit ELSE 0 END), 0) AS debito,
+    COALESCE(SUM(CASE WHEN aml.date BETWEEN '2025-01-01' AND '2025-12-31' THEN aml.credit ELSE 0 END), 0) AS credito,
+
+    -- Saldo final al 2025-12-31
+    COALESCE(SUM(CASE 
+        WHEN aml.date < '2025-01-01' THEN aml.debit - aml.credit
+        WHEN aml.date BETWEEN '2025-01-01' AND '2025-12-31' THEN aml.debit - aml.credit
+        ELSE 0
+    END), 0) AS saldo_final
+
+FROM account_move_line aml
+JOIN account_account aa ON aml.account_id = aa.id
+JOIN account_move am ON aml.move_id = am.id
+LEFT JOIN res_partner rp ON aml.partner_id = rp.id
+WHERE am.state = 'posted'
+  AND aml.partner_id IS NOT NULL
+GROUP BY rp.id, rp.name, rp.is_company, aa.id, aa.name
+ORDER BY rp.name, aa.id;
+

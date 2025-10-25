@@ -1,0 +1,32 @@
+SELECT 
+    t.name AS tercero,
+    m.date AS fecha,
+    c.id,
+    substring(c.code_store::text,8,8)||' '||(c.name->>'en_US') AS cuenta,
+    j.id, 
+    j.name->>'en_US' AS diario, 
+    l.move_name AS documento,
+    l.balance AS valor,
+    l.debit AS debito,
+    l.credit AS credito,
+    l.name AS descrip,
+    EXTRACT(YEAR FROM m.date) AS año,
+    EXTRACT(MONTH FROM m.date) AS mes,
+    EXTRACT(DAY FROM m.date) AS dia,
+    CASE WHEN j.id = 17 THEN l.balance ELSE 0 END AS venta,
+    CASE WHEN j.id = 23 THEN l.balance ELSE 0 END AS efectivo,
+    CASE WHEN j.id = 22 THEN l.balance ELSE 0 END AS otro,
+    CASE WHEN j.id IN(24,25,26,27,28,29) THEN l.balance ELSE 0 END AS consignaciones
+FROM 
+    account_move m, account_move_line l, account_account c, res_partner t, account_journal j
+WHERE 
+    l.move_id = m.id
+    AND l.account_id = c.id
+    AND l.partner_id = t.id
+    AND m.journal_id = j.id
+    AND j.id IN (22,23,25,26,27,28,29)
+    AND NOT l.debit = 0
+    AND substring(c.code_store::text,8,2) LIKE '11%'
+    AND m.company_id = 2
+    AND m.date BETWEEN '2025-01-01' AND '2025-12-31';
+
