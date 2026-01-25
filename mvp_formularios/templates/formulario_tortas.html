@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+<!--Don't forget your import here-->
+{% from 'bootstrap5/form.html' import render_form %}
+{% block title %}Automatización formularios Bony{% endblock %}
+
+{% block content %}
+
+<h1>REGISTRO CONTROL DE ELABORACIÓN DIARIA</h1>
+    <h2>Tortas Caseritas, Mantecadas y Torta Negra</h2>
+
+    <table>
+        <tr>
+            <td class="left"><strong>Fecha:</strong> {{ fecha }}</td>
+            <td class="left"><strong>Lote:</strong> {{ lote }}</td>
+            <td class="left"><strong>Turno:</strong> {{ turno }}</td>
+        </tr>
+    </table>
+
+    <!-- TABLA PRINCIPAL -->
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad Producida</th>
+                <th>Hora Inicio</th>
+                <th>Hora Fin</th>
+                <th>Temperatura (°C)</th>
+                <th>Observaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in produccion %}
+            <tr>
+                <td class="left">{{ item.producto }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.hora_inicio }}</td>
+                <td>{{ item.hora_fin }}</td>
+                <td>{{ item.temperatura }}</td>
+                <td class="left">{{ item.observaciones }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- CONTROL -->
+    <table>
+        <tr>
+            <th class="left">Responsable de Elaboración</th>
+            <th class="left">Responsable de Control</th>
+        </tr>
+        <tr>
+            <td class="signature"></td>
+            <td class="signature"></td>
+        </tr>
+        <tr>
+            <td class="left small">Nombre / Firma</td>
+            <td class="left small">Nombre / Firma</td>
+        </tr>
+    </table>
+
+{% endblock %}

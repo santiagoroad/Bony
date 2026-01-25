@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+<!--Don't forget your import here-->
+{% from 'bootstrap5/form.html' import render_form %}
+{% block title %}Automatización formularios Bony{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <div class="container">
+      <h1 class="display-4">💻 Procesar formularios producción 💻</h1>
+      <img src="{{ url_for('static', filename='logo_bony.jpg') }}" alt="Logo Bony" width="300">
+        {{ render_form(form)}}
+</div>
+    </div>
+
+    
+
+
+{% endblock %}
