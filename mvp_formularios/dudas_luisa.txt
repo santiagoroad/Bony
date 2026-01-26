@@ -1,0 +1,13 @@
+DUDAS GENERALES
+
+1. Necesito saber la posibilidad de productos que se pueden hacer por registro y como deben salir, por ejemplo:
+    Tortas -> Pueden salir tortas negras, tortas de arequipe (es necesario especificar el producto especifico que sale?)
+    Necesito lo mismo para cada uno de los parametros
+
+
+DUDAS TORTAS
+1. El numero de la batidora es el mismo para todos
+2. Cuanto tiempo es el de batido?
+3. Se sigue la logica de un batido después del otro? - no se deben tener en cuenta descanso, hora de almuerzo, etc
+4. El número del batido es consecutivo, inicia con el 1 y va aumentando?
+5. 

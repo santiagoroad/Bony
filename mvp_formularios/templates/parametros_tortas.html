@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+<!--Don't forget your import here-->
+{% from 'bootstrap5/form.html' import render_form %}
+{% block title %}Automatización formulario Torta Bony{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h1>Formulario de producción — Tortas caseritas, mantecadas y torta negra</h1>
+
+    <p>
+        Antes de generar el reporte, es necesario registrar información clave del proceso productivo.
+        Estos datos permiten garantizar la trazabilidad, el control de calidad y la consistencia del
+        documento final.
+    </p>
+
+    <p>
+        A continuación, diligencie los parámetros solicitados de acuerdo con el lote y el turno
+        correspondiente.
+    </p>
+
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.fecha_elaboracion.label(class="form-label") }}
+                {{ form.fecha_elaboracion(class="form-control") }}
+
+                {{ form.lote.label(class="form-label") }}
+                {{ form.lote(class="form-control") }}
+
+                {{ form.moldes_cuadraros.label(class="form-label") }}
+                {{ form.moldes_cuadraros(class="form-control") }}
+
+                {{ form.responsable_pesaje.label(class="form-label") }}
+                {{ form.responsable_pesaje(class="form-control") }}
+
+                {{ form.unidades_tortas.label(class="form-label") }}
+                {{ form.unidades_tortas(class="form-control") }}
+
+                {{ form.numero_batidora.label(class="form-label") }}
+                {{ form.numero_batidora(class="form-control") }}
+
+                {{ form.observaciones_mat_prima.label(class="form-label") }}
+                {{ form.observaciones_mat_prima(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.fecha_vencimiento.label(class="form-label") }}
+                {{ form.fecha_vencimiento(class="form-control") }}
+
+                {{ form.moldes_largos.label(class="form-label") }}
+                {{ form.moldes_largos(class="form-control") }}
+
+                {{ form.unidades_mantecadas.label(class="form-label") }}
+                {{ form.unidades_mantecadas(class="form-control") }}
+
+                {{ form.unidades_muffins.label(class="form-label") }}
+                {{ form.unidades_muffins(class="form-control") }}
+
+                {{ form.inicio_batido.label(class="form-label") }}
+                {{ form.inicio_batido(class="form-control") }}
+
+                {{ form.observaciones_batido.label(class="form-label") }}
+                {{ form.observaciones_batido(class="form-control") }}
+            </div>
+        </div>
+
+        <div class="mt-3">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+    </div>
+
+    
+
+
+{% endblock %}

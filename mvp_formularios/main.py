@@ -1,9 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response, redirect, url_for, session
 from flask_bootstrap import Bootstrap5
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
-import csv
+import csv, os
+from weasyprint import HTML
+from informacion_principal import FORMULARIOS_SELECCIONADOS, PROVEEDOR_MATERIA_PRIMA_TORTAS
 
 '''
 Red underlines? Install the required packages first: 
@@ -33,90 +35,86 @@ class Reporte(FlaskForm):
     submit = SubmitField('Continuar')
 
 class FormularioTortas(FlaskForm):
+    fecha_elaboracion = StringField('Fecha elaboración', validators=[DataRequired()])
+    fecha_vencimiento = StringField('Fecha vencimiento', validators=[DataRequired()])
+    lote = StringField('Lote', validators=[DataRequired()])
+    moldes_cuadraros = StringField('Moldes cuadrados', validators=[DataRequired()])
+    moldes_largos = StringField('Moldes largos', validators=[DataRequired()])
+    responsable_pesaje = StringField('Responsable pesaje', validators=[DataRequired()])
+    unidades_tortas = StringField('Unidades tortas', validators=[DataRequired()])
+    unidades_mantecadas = StringField('Unidades mantecadas', validators=[DataRequired()])
+    unidades_muffins = StringField('Unidades muffins', validators=[DataRequired()])
+    numero_batidora = StringField('Número batidora', validators=[DataRequired()])
+    inicio_batido = StringField('Hora inicio batido', validators=[DataRequired()])
+    observaciones_mat_prima = StringField('Observaciones materia prima', validators=[DataRequired()])
+    observaciones_batido = StringField('Observaciones batidos', validators=[DataRequired()])
+    submit = SubmitField('Generar archivo')
 
-    submit = SubmitField('Llenar')
-
-class CafeForm(FlaskForm):
-    cafe = StringField('Cafe name', validators=[DataRequired()])
-    location = StringField('Location', validators=[DataRequired()])
-    open = StringField('Open', validators=[DataRequired()])
-    close = StringField('Close', validators=[DataRequired()])
-    coffee = SelectField('Coffe', choices=[('☕', '☕'), ('☕☕', '☕☕'), ('☕☕☕', '☕☕☕'), ('☕☕☕☕','☕☕☕☕'), ('☕☕☕☕☕', '☕☕☕☕☕')], validators=[DataRequired()])
-    wifi = SelectField('Wifi', choices=[('✘', '✘'), ('💪', '💪'), ('💪💪', '💪💪'), ('💪💪💪', '💪💪💪'), ('💪💪💪💪','💪💪💪💪'), ('💪💪💪💪💪', '💪💪💪💪💪')], validators=[DataRequired()])
-    power = SelectField('Power', choices=[('✘', '✘'), ('🔌', '🔌'), ('🔌🔌', '🔌🔌'), ('🔌🔌🔌', '🔌🔌🔌'), ('🔌🔌🔌🔌','🔌🔌🔌🔌'), ('🔌🔌🔌🔌🔌', '🔌🔌🔌🔌🔌')], validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
+#### PAGINA PRINCIPAL
 @app.route("/", methods=["GET", "POST"])
 def home():
-    reporte_procesar = Reporte()    
-    context = {
-        "fecha": "2026-01-24",
-        "lote": "L-0124",
-        "turno": "Mañana",
-        "produccion": [
-            {
-                "producto": "Torta Caserita",
-                "cantidad": 120,
-                "hora_inicio": "06:00",
-                "hora_fin": "08:30",
-                "temperatura": 180,
-                "observaciones": ""
-            },
-            {
-                "producto": "Mantecada",
-                "cantidad": 80,
-                "hora_inicio": "09:00",
-                "hora_fin": "10:15",
-                "temperatura": 175,
-                "observaciones": "Sin novedades"
-            }
-        ]
-    }
-    if reporte_procesar.validate_on_submit():
-        formulario_procesar = reporte_procesar.reportes.data # tortas
-        return render_template(
-            "formulario_tortas.html",
-            fecha=context["fecha"],
-            lote=context["lote"],
-            turno=context["turno"],
-            produccion=context["produccion"]
-        )
-    else : 
-        return render_template("index.html", form=reporte_procesar)
+    reporte = Reporte()
 
+    if reporte.validate_on_submit():
+        tipo = reporte.reportes.data
+
+        template = FORMULARIOS_SELECCIONADOS[tipo]
+        
+        return redirect(url_for(template))
+    else :
+        return render_template("index.html", form=reporte)
+
+#### PARA LAS TORTAS
+@app.route('/parametros_tortas', methods=["GET", "POST"])
+def param_tortas():
+    reporte_tortas = FormularioTortas()
+
+    if reporte_tortas.validate_on_submit():
+        informacion_produccion_tortas = {
+            field.name: field.data
+            for field in reporte_tortas
+            if field.name != "submit"
+        }
+        
+        ## Con las lineas de codigo que están comentadas se descarga el pdf
+        html_rendered = render_template("formulario_tortas.html", **informacion_produccion_tortas)
+
+        # 2. Convertir HTML a PDF
+        pdf = HTML(
+            string=html_rendered,
+            base_url=os.path.abspath("static")
+        ).write_pdf()
+
+        # 3. Responder como descarga
+        response = make_response(pdf)
+        response.headers["Content-Type"] = "application/pdf"
+        response.headers["Content-Disposition"] = (
+            f"attachment; filename=tortas.pdf"
+        )
+
+        return response
+
+        # session["datos_tortas"] = informacion_produccion_tortas
+        # return redirect(url_for('tortas'))
+    else :
+        return render_template("parametros_tortas.html", form = reporte_tortas)
 
 @app.route('/tortas', methods=["GET", "POST"])
 def tortas():
-    return render_template("index.html")
+    datos = session.get("datos_tortas")
+    print("##########")
+    print(datos)
+    return render_template("formulario_tortas.html")
 
-@app.route('/add', methods=["GET", "POST"])
-def add_cafe():
-    form = CafeForm()
-    if form.validate_on_submit():
-        new_coffee = [form.cafe.data, form.location.data, form.open.data, form.close.data,
-                      form.coffee.data, form.wifi.data, form.power.data]
-        with open('cafe-data.csv', 'a', newline='', encoding='utf-8') as csv_file:
-            csv_data = csv.writer(csv_file)
-            csv_data.writerow(new_coffee)
-        with open('cafe-data.csv', newline='', encoding='utf-8') as csv_file:
-            csv_data = csv.reader(csv_file, delimiter=',')
-            list_of_rows = []
-            for row in csv_data:
-                list_of_rows.append(row)
-        return render_template('cafes.html', cafes=list_of_rows)
-    else:
-        return render_template('add.html', form=form)
+#### PARA EL HOJALDRE
+@app.route('/parametros_hojaldre', methods=["GET", "POST"])
+def hojaldre():
+    return render_template("parametros_hojaldre.html")
 
-
-@app.route('/cafes', methods=["GET", "POST"])
-def cafes():
-    with open('cafe-data.csv', newline='', encoding='utf-8') as csv_file:
-        csv_data = csv.reader(csv_file, delimiter=',')
-        list_of_rows = []
-        for row in csv_data:
-            list_of_rows.append(row)
-    return render_template('cafes.html', cafes=list_of_rows)
-
+#### PARA LOS BROWNIES
+@app.route('/parametros_brownies', methods=["GET", "POST"])
+def brownies():
+    return render_template("parametros_brownies.html")
 
 if __name__ == '__main__':
     app.run(debug=True)

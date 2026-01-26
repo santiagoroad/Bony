@@ -6,11 +6,24 @@
 {% block content %}
 <div class="jumbotron text-center">
     <div class="container">
-      <h1 class="display-4">💻 Procesar formularios producción 💻</h1>
-      <img src="{{ url_for('static', filename='logo_bony.jpg') }}" alt="Logo Bony" width="300">
-        {{ render_form(form)}}
-</div>
+        <h1 class="display-4">Procesamiento de formularios de producción</h1>
+
+        <p class="mt-3">
+            Esta herramienta centraliza y automatiza el diligenciamiento de los formularios de producción.
+            Su objetivo es reducir tiempos operativos, minimizar errores manuales y estandarizar la captura
+            de información en los distintos procesos productivos.
+        </p>
+
+        <p>
+            A través de este sistema es posible generar reportes claros, consistentes y listos para su
+            almacenamiento, auditoría o exportación.
+        </p>
+
+        <img src="{{ url_for('static', filename='logo_bony.jpg') }}" alt="Logo Bony" width="300" class="my-4">
+
+        {{ render_form(form) }}
     </div>
+</div>
 
     
 

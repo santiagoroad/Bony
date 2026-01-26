@@ -1,61 +1,180 @@
-{% extends 'base.html' %}
-<!--Don't forget your import here-->
-{% from 'bootstrap5/form.html' import render_form %}
-{% block title %}Automatización formularios Bony{% endblock %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Control Materia Prima</title>
 
-{% block content %}
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+      
+        /* ===== HEADER ===== */
+        .header {
+            display: table;
+            width: 100%;
+            margin-bottom: 10px;
+            border-collapse: collapse;
+        }
 
-<h1>REGISTRO CONTROL DE ELABORACIÓN DIARIA</h1>
-    <h2>Tortas Caseritas, Mantecadas y Torta Negra</h2>
+        .header-cell {
+            display: table-cell;
+            width: 33.33%;
+            vertical-align: middle;
+            text-align: center;
+        }
 
-    <table>
-        <tr>
-            <td class="left"><strong>Fecha:</strong> {{ fecha }}</td>
-            <td class="left"><strong>Lote:</strong> {{ lote }}</td>
-            <td class="left"><strong>Turno:</strong> {{ turno }}</td>
-        </tr>
-    </table>
+        .header img {
+            max-width: 200px;
+        }
+      
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+        }
 
-    <!-- TABLA PRINCIPAL -->
-    <table>
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad Producida</th>
-                <th>Hora Inicio</th>
-                <th>Hora Fin</th>
-                <th>Temperatura (°C)</th>
-                <th>Observaciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in produccion %}
-            <tr>
-                <td class="left">{{ item.producto }}</td>
-                <td>{{ item.cantidad }}</td>
-                <td>{{ item.hora_inicio }}</td>
-                <td>{{ item.hora_fin }}</td>
-                <td>{{ item.temperatura }}</td>
-                <td class="left">{{ item.observaciones }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        /* ===== TABLA GENERAL ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #000;   /* borde externo fuerte */
+        }
 
-    <!-- CONTROL -->
-    <table>
-        <tr>
-            <th class="left">Responsable de Elaboración</th>
-            <th class="left">Responsable de Control</th>
-        </tr>
-        <tr>
-            <td class="signature"></td>
-            <td class="signature"></td>
-        </tr>
-        <tr>
-            <td class="left small">Nombre / Firma</td>
-            <td class="left small">Nombre / Firma</td>
-        </tr>
-    </table>
+        th, td {
+            border: 1.5px solid #000; /* líneas internas visibles */
+            padding: 4px;
+            vertical-align: middle;
+        }
 
-{% endblock %}
+        th {
+            text-align: center;
+            font-weight: bold;
+            background-color: #f2f2f2; /* leve contraste */
+        }
+
+        td.left {
+            text-align: left;
+        }
+
+        td.center {
+            text-align: center;
+        }
+
+        /* Altura de filas tipo Excel */
+        .row-normal {
+            height: 22px;
+        }
+
+        .row-large {
+            height: 35px;
+        }
+
+        /* Separadores visuales */
+        .section-title {
+            font-weight: bold;
+            background-color: #e6e6e6;
+        }
+
+        .observaciones {
+            height: 45px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== ENCABEZADO ===== -->
+    <div class="header">
+        <div class="header-cell">
+            <img src="logo_bony.jpg" alt="Logo Bony", width="200">
+        </div>
+
+        <div class="header-cell">
+            <strong>CONTROL ELABORACIÓN DIARIA<br>
+            TORTAS Y MUFFINS</strong>
+        </div>
+
+        <div class="header-cell">
+            Código R-EDP-143<br>
+            Versión 007<br>
+            Fecha actualización: 27/02/2025
+        </div>
+    </div>
+
+<table>
+
+    <!-- ENCABEZADO -->
+    <tr>
+        <th>MATERIA PRIMA</th>
+        <th>PROVEEDOR</th>
+        <th>LOTE</th>
+        <th>FECHA DE<br>VENCIMIENTO</th>
+        <th>RESPONSABLE<br>PESAJE</th>
+        <th>UNIDADES ELABORADAS<br>DE CADA REFERENCIA</th>
+    </tr>
+
+    <!-- FILAS DE MATERIA PRIMA -->
+    {% for item in materias_primas %}
+    <tr class="row-normal">
+        <td class="left">{{ item.nombre }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    {% endfor %}
+
+    <!-- PRODUCTO NO CONFORME -->
+    <tr class="row-large">
+        <td colspan="5" class="left section-title">
+            PRODUCTO NO CONFORME:
+        </td>
+        <td></td>
+    </tr>
+
+    <!-- DESTINO -->
+    <tr class="row-large">
+        <td colspan="5" class="left section-title">
+            DESTINO:
+        </td>
+        <td></td>
+    </tr>
+
+    <!-- SECCIÓN CUMPLIMIENTO -->
+    <tr>
+        <th>CERNIDO / TAMIZADO</th>
+        <th>HARINA</th>
+        <th>COCOA</th>
+        <th colspan="2">ACCIÓN CORRECTIVA</th>
+        <th>RESPONSABLE</th>
+    </tr>
+
+    <tr class="row-normal">
+        <td class="center">CUMPLE</td>
+        <td></td>
+        <td></td>
+        <td colspan="2"></td>
+        <td></td>
+    </tr>
+
+    <tr class="row-normal">
+        <td class="center">NO CUMPLE</td>
+        <td></td>
+        <td></td>
+        <td colspan="2"></td>
+        <td></td>
+    </tr>
+
+    <!-- OBSERVACIONES -->
+    <tr>
+        <td colspan="6" class="left observaciones section-title">
+            OBSERVACIONES:
+        </td>
+    </tr>
+
+</table>
+
+</body>
+</html>
