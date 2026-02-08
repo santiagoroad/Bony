@@ -6,10 +6,10 @@ from datetime import timedelta
 
 # ---------------------------------------------------------------------------------------------------------------- #
 # -------------------------------------------------- PARAMETROS -------------------------------------------------- #
-ARCHIVO_HORAS = "Insumos/bony_horas_5_14_ene.txt"   # SE CAMBIA EL NOMBRE DEL PARAMETRO POR EL NOMBRE DEL ARCHIVO
+ARCHIVO_HORAS = "Insumos/horas_bony_31_enero.txt"   # SE CAMBIA EL NOMBRE DEL PARAMETRO POR EL NOMBRE DEL ARCHIVO
 ARCHIVO_USERS = "Insumos/user_bony.xlsx"    # NO SE DEBE ACTUALIZAR EL NOMBRE DEL ARCHIVO, SIEMPRE VA A SER EL MISMO
-FECHA_INICIO = "2026-01-05"                 # SE AGREGA LA FECHA INICIAL PARA EL CALCULO
-FECHA_FIN    = "2026-01-14"                 # SE AGREGA LA FECHA FINAL PARA EL CALCULO
+FECHA_INICIO = "2026-01-16"                 # SE AGREGA LA FECHA INICIAL PARA EL CALCULO
+FECHA_FIN    = "2026-01-31"                 # SE AGREGA LA FECHA FINAL PARA EL CALCULO
 resultado = []
 
 # ---------------------------------------------------------------------------------------------------------------- #
@@ -49,7 +49,8 @@ for (user, fecha), grupo in info.groupby(["user", "date"]):
     # Caso sin datos suficientes → no se puede calcular jornada
     if len(grupo) < 2:
         trabajo_real = timedelta(0)
-
+        #resultado.append([fecha, grupo.iloc[0]["user"], grupo.iloc[0]["cc"], grupo.iloc[0]["nombre"], 0,0,0,0])
+        
     else:
         inicio = grupo.iloc[0]["timestamp"]
         salida = grupo.iloc[-1]["timestamp"]
@@ -74,7 +75,7 @@ for (user, fecha), grupo in info.groupby(["user", "date"]):
 
     # Conversión a horas decimales
     horas = trabajo_real.total_seconds() / 3600
-
+    
     resultado.append([fecha, grupo.iloc[0]["user"], grupo.iloc[0]["cc"], grupo.iloc[0]["nombre"], inicio, salida, deduccion, round(horas, 2)])
 
 res = pd.DataFrame(resultado, columns=["date", "user", "cc", "nombre", "hora_entrada", "hora_salida", "valor_deduccion", "horas_extra"])
@@ -96,7 +97,7 @@ total_horas = (
 
 os.chdir("Resultado/")
 
-with pd.ExcelWriter("reporte_horas_ene_5_14.xlsx", engine="xlsxwriter") as writer:
+with pd.ExcelWriter("reporte_horas_ene_31.xlsx", engine="xlsxwriter") as writer:
     res.to_excel(
         writer,
         sheet_name="informacion_general",

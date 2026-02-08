@@ -5,8 +5,8 @@ from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 import csv, os
 from weasyprint import HTML
-from informacion_principal import FORMULARIOS_SELECCIONADOS, PROVEEDOR_MATERIA_PRIMA_TORTAS
-
+from informacion_principal import FORMULARIOS_SELECCIONADOS, MATERIA_PRIMA_TORTAS
+from funtions import listado_materia_prima
 '''
 Red underlines? Install the required packages first: 
 Open the Terminal in PyCharm (bottom left). 
@@ -76,8 +76,10 @@ def param_tortas():
             if field.name != "submit"
         }
         
+        materias_primas = listado_materia_prima("Information/materia_prima_test.xlsx", "torta")
+        
         ## Con las lineas de codigo que están comentadas se descarga el pdf
-        html_rendered = render_template("formulario_tortas.html", **informacion_produccion_tortas)
+        html_rendered = render_template("formulario_tortas.html", materias_primas = materias_primas)
 
         # 2. Convertir HTML a PDF
         pdf = HTML(
@@ -102,9 +104,10 @@ def param_tortas():
 @app.route('/tortas', methods=["GET", "POST"])
 def tortas():
     datos = session.get("datos_tortas")
-    print("##########")
-    print(datos)
-    return render_template("formulario_tortas.html")
+    
+    materias_primas = listado_materia_prima("Information/materia_prima_test.xlsx", "torta")
+    print(materias_primas)
+    return render_template("formulario_tortas.html", form = materias_primas)
 
 #### PARA EL HOJALDRE
 @app.route('/parametros_hojaldre', methods=["GET", "POST"])

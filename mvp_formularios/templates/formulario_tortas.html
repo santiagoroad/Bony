@@ -83,7 +83,7 @@
 </head>
 
 <body>
-
+{% from 'bootstrap5/form.html' import render_form %}
     <!-- ===== ENCABEZADO ===== -->
     <div class="header">
         <div class="header-cell">
@@ -117,12 +117,12 @@
     <!-- FILAS DE MATERIA PRIMA -->
     {% for item in materias_primas %}
     <tr class="row-normal">
-        <td class="left">{{ item.nombre }}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td class="left">{{ item['MATERIA_PRIMA'].iloc[0] }}</td>
+        <td class="left">{{ item['PROVEEDOR'].iloc[0] }}</td>
+        <td class="left">{{ item['LOTE'].iloc[0] }}</td>
+        <td class="left">{{ item['FECHA_VENCIMIENTO'].iloc[0] }}</td>
+        <td class="left">Pepito Perez</td>
+        <td class="left"></td>
     </tr>
     {% endfor %}
 
