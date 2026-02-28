@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+<!--Don't forget your import here-->
+{% from 'bootstrap5/form.html' import render_form %}
+{% block title %}Automatización formularios Bony{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <img src="{{ url_for('static', filename='logo_bony.jpg') }}" alt="Logo Bony" width="300" class="my-4">
+        <hr>
+
+        <div class="row">
+            
+            <h2>Brownie</h2>
+
+            <div class="col-md-6">
+                {{ form.b_arequipe.label }} {{ form.b_arequipe(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_refri.label }} {{ form.b_refri(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_mora_arequipe.label }} {{ form.b_mora_arequipe(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_chocolate.label }} {{ form.b_chocolate(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_arequipe_pasion.label }} {{ form.b_arequipe_pasion(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_chocho_pasion.label }} {{ form.b_chocho_pasion(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_refri_pasion.label }} {{ form.b_refri_pasion(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_white.label }} {{ form.b_white(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_mini.label }} {{ form.b_mini(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_mini_chocolate.label }} {{ form.b_mini_chocolate(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_mini_mani.label }} {{ form.b_mini_mani(class="form-control") }}
+            </div>
+
+            <h2>Tortas</h2>
+
+            <div class="col-md-6">
+                {{ form.mantecada.label }} {{ form.mantecada(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.t_fruta.label }} {{ form.t_fruta(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.t_amapola.label }} {{ form.t_amapola(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.t_negra.label }} {{ form.t_negra(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.t_tiramisu.label }} {{ form.t_tiramisu(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.t_arequipe_chocolate.label }} {{ form.t_arequipe_chocolate(class="form-control") }}
+            </div>
+
+            <h2>NO SE COMO AGRUPAR ESTO</h2>
+
+            <div class="col-md-6">
+                {{ form.brookie.label }} {{ form.brookie(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.alfabrownie.label }} {{ form.alfabrownie(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.alfajor.label }} {{ form.alfajor(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.truffes.label }} {{ form.truffes(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.galleta_avena.label }} {{ form.galleta_avena(class="form-control") }}
+            </div>
+
+        </div>
+
+
+        <h3 class="mt-5">CHOCOCHOICE</h3>
+        <hr>
+
+        <div class="row">
+
+            <h2>HOJALDRE</h2>
+            
+            <div class="col-md-6">
+                {{ form.bocaditos.label }} {{ form.bocaditos(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.corazones.label }} {{ form.corazones(class="form-control") }}
+            </div>
+
+            <h2>ALFAJOR</h2>
+
+            <div class="col-md-6">
+                {{ form.a_negro.label }} {{ form.a_negro(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.a_blanco.label }} {{ form.a_blanco(class="form-control") }}
+            </div>
+
+            <h2>GALLETA</h2>
+
+            <div class="col-md-6">
+                {{ form.g_vinilla.label }} {{ form.g_vinilla(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.g_chocolate.label }} {{ form.g_chocolate(class="form-control") }}
+            </div>
+
+            <h2>Brownie</h2>
+
+            <div class="col-md-6">
+                {{ form.b_cheesecake.label }} {{ form.b_cheesecake(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_milky.label }} {{ form.b_milky(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_super.label }} {{ form.b_super(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.b_walnut.label }} {{ form.b_walnut(class="form-control") }}
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+
+    </form>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Control Producción</title>
+
+<style>
+@page {
+    size: A4;
+    margin: 10mm;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    border:2px solid #000;
+}
+
+th,td{
+    border:1.5px solid #000;
+    padding:4px;
+}
+
+th{
+    text-align:center;
+    background:#f2f2f2;
+}
+
+.section-title{
+    font-weight:bold;
+    background:#e6e6e6;
+}
+</style>
+</head>
+
+<body>
+
+<!-- BONY -->
+<table style="margin-top:10px;">
+
+<tr>
+<th colspan="5" class="section-title">Bony</th>
+</tr>
+
+<tr>
+<th>Producto</th>
+<th>Peso</th>
+<th>Latas</th>
+<th>Batidos</th>
+<th>Inventario teorico</th>
+</tr>
+
+{% for row in produccion.itertuples() %}
+{% if row.Empresa == "Bony" and row.Cantidad > 0 %}
+<tr>
+<td>{{ row.Nombre }}</td>
+<td class="center">{{ row.Gramaje }}</td>
+<td class="center">{{ row.Latas }}</td>
+<td class="center">{{ row.Batidos }}</td>
+<td class="center">{{ row.Cantidad }}</td>
+</tr>
+{% endif %}
+{% endfor %}
+
+</table>
+
+
+<!-- CHOCOCHOICE -->
+
+<table style="margin-top:20px;">
+
+<tr>
+<th colspan="5" class="section-title">Chocochoice</th>
+</tr>
+
+<tr>
+<th>Producto</th>
+<th>Peso</th>
+<th>Latas</th>
+<th>Batidos</th>
+<th>Inventario teorico</th>
+</tr>
+
+{% for row in produccion.itertuples() %}
+{% if row.Empresa == "Chocochoice" and row.Cantidad > 0 %}
+<tr>
+<td>{{ row.Nombre }}</td>
+<td class="center">{{ row.Gramaje }}</td>
+<td class="center">{{ row.Latas }}</td>
+<td class="center">{{ row.Batidos }}</td>
+<td class="center">{{ row.Cantidad }}</td>
+</tr>
+{% endif %}
+{% endfor %}
+
+</table>
+
+</body>
+</html>
